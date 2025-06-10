@@ -15,22 +15,18 @@ def get_users():
 @api.route('/register', methods=['POST'])
 def user_register():
     body = request.get_json()
-    if 'email' and 'password' in body:
-
-        new_pass = bcrypt.hashpw(body('password').encode(), bcrypt.gensalt)
+    if 'email' in body and 'password' in body:
+        new_pass = bcrypt.hashpw(body['password'].encode(), bcrypt.gensalt())
 
         new_user = User()
-        new_user.email = body('email')
+        new_user.email = body['email']
         new_user.password = new_pass.decode()
         new_user.is_active = True
 
         db.session.add(new_user)
         db.session.commit() 
 
-        return jsonify('User create'), 200
+        return jsonify('User created'), 200
 
-
-
-
-    return jsonify('Falta el email o el password'),400
+    return jsonify('Falta el email o el password'), 400
     

@@ -7,9 +7,10 @@ from flask_migrate import Migrate
 from flask_swagger import swagger
 from api.utils import APIException, generate_sitemap
 from api.database.db import db
-from api.routes import api
+from api.routes.user import api
 from api.admin import setup_admin
 from api.commands import setup_commands
+from flask_cors import CORS
 
 # from models import Person
 
@@ -18,6 +19,9 @@ static_file_dir = os.path.join(os.path.dirname(
     os.path.realpath(__file__)), '../dist/')
 app = Flask(__name__)
 app.url_map.strict_slashes = False
+
+# Configuración de CORS
+CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 # database condiguration
 db_url = os.getenv("DATABASE_URL")
