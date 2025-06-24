@@ -3,8 +3,11 @@ from flask import Blueprint, jsonify, request
 from api.database.db import db
 import bcrypt
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
+from flask_cors import CORS
+
 
 api = Blueprint('api/user', __name__)
+CORS(api)
 
 @api.route('/', methods=['GET'])
 def get_users():
@@ -12,11 +15,8 @@ def get_users():
     all_user_serialize = list(map(lambda user: user.serialize(), all_user))
     return jsonify(all_user_serialize), 200
 
-@api.route('/register', methods=['POST', 'OPTIONS'])
+@api.route('/register', methods=['POST'])
 def user_register():
-    if request.method == 'OPTIONS':
-        return '', 200
-        
     try:
         body = request.get_json()
         if not body or 'email' not in body or 'password' not in body:
@@ -42,11 +42,9 @@ def user_register():
         db.session.rollback()
         return jsonify({'error': str(e)}), 500
 
-@api.route('/login', methods=['POST', 'OPTIONS'])
+@api.route('/login', methods=['POST'])
 def user_login():
-    if request.method == 'OPTIONS':
-        return '', 200
-
+    
     try:
         body = request.get_json()
         if not body or 'email' not in body or 'password' not in body:
@@ -70,12 +68,9 @@ def user_login():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-@api.route('/logout', methods=['POST', 'OPTIONS'])
+@api.route('/logout', methods=['POST'])
 @jwt_required()
 def user_logout():
-    if request.method == 'OPTIONS':
-        return '', 200
-        
     try:
         current_user_id = int(get_jwt_identity())
         user = User.query.get(current_user_id)

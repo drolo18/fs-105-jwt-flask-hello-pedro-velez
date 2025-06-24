@@ -9,7 +9,6 @@ const SignupUser = async(body) => {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
             },
-            credentials: 'include',
             body: JSON.stringify(body)
         })
         
@@ -34,7 +33,6 @@ const LoginUser = async(body) => {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
             },
-            credentials: 'include',
             body: JSON.stringify(body)
         })
 

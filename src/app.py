@@ -19,8 +19,11 @@ ENV = "development" if os.getenv("FLASK_DEBUG") == "1" else "production"
 static_file_dir = os.path.join(os.path.dirname(
     os.path.realpath(__file__)), '../dist/')
 app = Flask(__name__)
+CORS(app)
+
 app.register_blueprint(user_api, url_prefix='/api/user')
-CORS(app, supports_credentials=True, origins=["https://supreme-memory-pjwpqv74wpxwc5wj-3000.app.github.dev"])
+
+
 app.url_map.strict_slashes = False
 
 
